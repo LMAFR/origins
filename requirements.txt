@@ -1,0 +1,37 @@
+##############################
+# Core runtime dependencies  #
+##############################
+# Pin to avoid NumPy 2.x breakages with some libs
+numpy<2.0
+
+# SciPy for smoothing/filters
+scipy>=1.10,<1.12
+
+# Audio analysis (onset envelope, beat_track fallback)
+librosa>=0.10.1,<0.11
+
+# Video I/O and pose extraction
+opencv-python>=4.7
+mediapipe>=0.10.14
+
+# Audio extraction and utilities
+moviepy>=1.0.3
+
+# Visualisation (optional, used for future plots)
+matplotlib>=3.7
+
+##############################
+# Optional extras            #
+##############################
+# Streamlit UI (Phase 2+)
+# streamlit
+
+# Advanced downbeat tracking (optional):
+# madmom==0.16.1
+
+# Drum stem separation (optional, heavy):
+# spleeter
+# demucs
+
+# Numba is optional for librosa speedups; avoid due to py311 frictions
+# numba
