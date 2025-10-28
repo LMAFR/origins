@@ -36,24 +36,33 @@ Origins/
 │   └── smoothing.py
 ├── ui/
 │   ├── __init__.py
-│   └── app_streamlit.py  # Placeholder Streamlit interface
-├── main.py               # Command-line entry point (placeholder)
+│   └── app_streamlit.py  # Streamlit live viewer (video + audio graphs)
+├── main.py               # Command-line entry point (MVP pipeline)
 ├── requirements.txt      # List of Python dependencies
 ├── .gitignore            # Files and directories to ignore in Git
 └── README.md             # This file
 ```
 
-Most modules currently contain **placeholder implementations**. They
-include docstrings describing their intended functionality and raise
-`NotImplementedError` when called. This structure allows you to
-incrementally fill in the implementations while maintaining a coherent
-package layout.
+The repository now contains a working Phase 1 MVP:
+
+- Audio beat tracking (librosa fallback; optional madmom if installed)
+- Pose extraction with MediaPipe Pose and ankle trajectory construction
+- Heel-strike detection from ankle trajectories
+- A/V offset estimation and alignment
+- Timing evaluation with Gaussian scoring
+- CLI to run end to end and optional CSV export
+- Streamlit live viewer with DJ-style audio graphs and a rolling table of last events
 
 ## Getting started
 
 1. **Create a virtual environment** (recommended):
 
    ```bash
+   # Windows (Git Bash)
+   python -m venv .venv
+   source .venv/Scripts/activate
+
+   # macOS / Linux
    python3 -m venv .venv
    source .venv/bin/activate
    ```
@@ -69,25 +78,32 @@ package layout.
    Create a directory called `test-files` at the root of this project and
    place your video files there. These files will not be tracked by Git.
 
-4. **Run the command-line script** (placeholder):
+4. **Run the command-line script**:
 
    ```bash
-   python main.py path/to/your/video.mp4
+   python main.py test-files/your_video.mp4 --write-csv --output output
    ```
 
-   This will currently print a message that the analysis is not yet
-   implemented. Future versions will analyse the video and output
-   statistics.
+   This runs the full pipeline:
+   - extracts audio from the video (moviepy; falls back to ffmpeg if needed)
+   - tracks beats
+   - extracts ankle trajectories and detects heel strikes
+   - estimates a global offset and evaluates timing vs beats
+   - prints a summary and optionally writes per-step CSV in `output/`
 
-5. **Launch the Streamlit app** (placeholder):
+5. **Launch the Streamlit app**:
 
    ```bash
-   streamlit run Origins/ui/app_streamlit.py
+   # If `streamlit` is not on PATH, use the venv Python module invocation:
+   python -m streamlit run ui/app_streamlit.py
    ```
 
-   A web page will open with a placeholder message. Eventually, this
-   interface will allow you to upload videos, run the analysis and
-   visualise the results.
+   A web page will open showing:
+   - the selected video
+   - live audio graphs (onset envelope, RMS percussive/harmonic, band energies)
+   - a dynamic table with the last 3 beats and last 3 steps
+
+   Tip: Place your test videos in `test-files/` so the app can list them.
 
 ## Contributing
 
